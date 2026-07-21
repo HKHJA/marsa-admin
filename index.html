@@ -192,6 +192,15 @@
         <div class="field"><label>العنوان</label><input id="s_bd_title" placeholder="🎉 كل عام وأنتِ بخير"></div>
         <div class="field"><label>الرسالة</label><input id="s_bd_msg" placeholder="هدية خاصة من ..."></div>
       </div>
+      <div class="card">
+        <h2>📢 إعلان عام للعملاء</h2>
+        <div class="hint">يظهر كشريط في أعلى التطبيق لكل من يفتحه. مثالي للإعلان عن عرض أو خبر.</div>
+        <div class="svc" style="border:0;padding:0 0 12px">
+          <div class="l">تفعيل الإعلان</div>
+          <label class="switch"><input type="checkbox" id="s_ann_on"><span class="slider"></span></label>
+        </div>
+        <div class="field"><label>نص الإعلان</label><input id="s_ann_text" placeholder="مثال: خصم خاص على رحلات دبي لهذا الأسبوع!"></div>
+      </div>
     </div>
   </div>
 
@@ -316,12 +325,14 @@ function renderSettings(){
   s_fpct.value=settings.flightPct??8; s_ffix.value=settings.flightFixed??15; s_hpct.value=settings.hotelPct??12;
   s_iqd.value=settings.usdToIqd??1310;
   const bd=settings.birthday||{}; s_bd_on.checked=!!bd.enabled; s_bd_title.value=bd.title||''; s_bd_msg.value=bd.message||'';
+  const an=settings.announcement||{}; s_ann_on.checked=!!an.enabled; s_ann_text.value=an.text||'';
 }
 function collectSettings(){
   settings.whatsapp=s_wa.value.trim(); settings.currency=s_cur.value.trim()||'USD';
   settings.flightPct=+s_fpct.value; settings.flightFixed=+s_ffix.value; settings.hotelPct=+s_hpct.value;
   settings.usdToIqd=+s_iqd.value||1310;
   settings.birthday={enabled:s_bd_on.checked,title:s_bd_title.value.trim(),message:s_bd_msg.value.trim()};
+  settings.announcement={enabled:s_ann_on.checked,text:s_ann_text.value.trim()};
 }
 function renderAll(){renderFlights();renderHotels();renderServices();renderDeals();renderReviews();renderSettings();}
 
