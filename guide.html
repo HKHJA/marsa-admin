@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مرسى بغداد — دليل الاستخدام ومواصفات المنتج (PRD)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--cyan:#22B8E8;--cyan-d:#0E7BA8;--ink:#12333f;--muted:#64757d;--bg:#f3f8fb;--line:#e2ecf1;--card:#fff}
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Cairo',sans-serif}
+  body{background:var(--bg);color:var(--ink);line-height:1.85}
+  .hero{background:linear-gradient(135deg,var(--cyan),var(--cyan-d));color:#fff;padding:40px 24px;text-align:center}
+  .hero .mb{font-weight:800;font-size:40px;letter-spacing:1px}
+  .hero h1{font-size:22px;font-weight:700;margin-top:6px}
+  .hero p{opacity:.9;font-size:14px;margin-top:8px}
+  .hero .v{display:inline-block;margin-top:14px;background:#ffffff22;border:1px solid #ffffff44;border-radius:20px;padding:4px 14px;font-size:12px}
+  .wrap{max-width:900px;margin:0 auto;padding:24px}
+  .toc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 24px;margin-bottom:24px}
+  .toc h3{font-size:15px;color:var(--cyan-d);margin-bottom:10px}
+  .toc a{display:block;color:var(--ink);text-decoration:none;padding:4px 0;font-size:14px;border-bottom:1px dashed var(--line)}
+  .toc a:hover{color:var(--cyan)}
+  section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:20px}
+  h2{font-size:20px;color:var(--cyan-d);margin-bottom:12px;display:flex;align-items:center;gap:10px}
+  h2 .n{background:var(--cyan);color:#fff;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex:none}
+  h3{font-size:16px;margin:16px 0 6px}
+  p{margin-bottom:10px;font-size:15px}
+  ul{margin:6px 24px 12px}
+  li{margin-bottom:6px;font-size:15px}
+  .box{background:#eaf7fc;border-right:4px solid var(--cyan);border-radius:10px;padding:12px 16px;margin:12px 0;font-size:14px}
+  .warn{background:#fff8e6;border-right-color:#e0a82e}
+  .step{background:#f7fbfd;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:8px 0}
+  .step b{color:var(--cyan-d)}
+  code{background:#0e2a38;color:#7fe0ff;padding:2px 8px;border-radius:6px;font-size:13px;direction:ltr;display:inline-block}
+  a.link{color:var(--cyan-d);word-break:break-all}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:right}
+  th{background:#eaf7fc;color:var(--cyan-d)}
+  .tag{display:inline-block;background:#e6f7ee;color:#1a8a54;font-size:11px;font-weight:700;padding:2px 8px;border-radius:12px}
+  .tag.soon{background:#fff0e6;color:#c9701a}
+  .foot{text-align:center;color:var(--muted);font-size:13px;padding:20px}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="mb">M✈B</div>
+  <h1>مرسى بغداد — دليل الاستخدام ومواصفات المنتج</h1>
+  <p>تطبيق العميل + لوحة تحكم الإدارة</p>
+  <div class="v">الإصدار 2.0 — يُحدَّث مع كل تطوير</div>
+</div>
+
+<div class="wrap">
+
+  <div class="toc">
+    <h3>المحتويات</h3>
+    <a href="#overview">١. نظرة عامة على المنتج</a>
+    <a href="#parts">٢. مكوّنات النظام وكيف تترابط</a>
+    <a href="#app">٣. تطبيق العميل — كيف يُستخدم</a>
+    <a href="#admin">٤. لوحة التحكم (الويب) — كيف تُدار</a>
+    <a href="#pricing">٥. الأسعار وهامش الربح</a>
+    <a href="#accounts">٦. الحسابات والروابط المهمة</a>
+    <a href="#roadmap">٧. الميزات القادمة (خارطة الطريق)</a>
+  </div>
+
+  <section id="overview">
+    <h2><span class="n">١</span> نظرة عامة على المنتج</h2>
+    <p><b>مرسى بغداد</b> تطبيق سفر وسياحة متكامل لوكالة السفر، يعرض للعميل خدمات السفر بأسعار (شاملة هامش ربح الوكالة)، ويتيح إتمام الحجز مباشرةً عبر <b>واتساب</b> — فيتواصل العميل مع الوكالة وتُكمل هي البيع والدفع بطريقتها المعتادة.</p>
+    <p>النظام مصمَّم خصيصًا للسوق العراقي: واجهة عربية، حجز عبر واتساب (بدون بوابات دفع معقّدة)، وأسعار الرحلات المحلية (الخطوط العراقية، فلاي بغداد...) تُدار يدويًا لأنها غير متوفرة في المزوّدين العالميين.</p>
+    <div class="box">الفكرة الأساسية: <b>«اعرض السعر → احجز عبر واتساب»</b>. لا حاجة لاعتماد IATA أو بوابة دفع أو عقد مع مزوّد عالمي.</div>
+  </section>
+
+  <section id="parts">
+    <h2><span class="n">٢</span> مكوّنات النظام وكيف تترابط</h2>
+    <p>النظام يتكوّن من ثلاثة أجزاء تعمل معًا:</p>
+    <ul>
+      <li><b>تطبيق العميل (Android):</b> يستخدمه الزبائن لتصفح الخدمات ورؤية الأسعار والحجز عبر واتساب.</li>
+      <li><b>لوحة التحكم (موقع ويب):</b> تستخدمها صاحبة الوكالة لإدارة الأسعار والخدمات والعروض من أي متصفح.</li>
+      <li><b>قاعدة البيانات (Supabase):</b> الوسيط المشترك — لوحة التحكم تكتب فيه، والتطبيق يقرأ منه.</li>
+    </ul>
+    <div class="box">دورة العمل: <b>تعدّلين السعر في اللوحة ← تضغطين حفظ ← يتحدّث السعر فورًا في تطبيق كل العملاء</b> — بدون إعادة بناء التطبيق.</div>
+  </section>
+
+  <section id="app">
+    <h2><span class="n">٣</span> تطبيق العميل — كيف يُستخدم</h2>
+
+    <h3>الشاشة الرئيسية — شبكة الخدمات</h3>
+    <p>تعرض كل الخدمات المُفعّلة: حجز طيران، فنادق، تأشيرات (فيزا)، إجازة سوق دولية، تأمين، عمرة وحج، باقات سياحية، استقبال بالمطار، تأجير سيارات، شريحة eSIM، ترجمة وتصديق، واستفسار عام.</p>
+
+    <h3>حجز الطيران</h3>
+    <p>يختار العميل «من / إلى»، التاريخ، وعدد المسافرين، ثم يظهر له قائمة رحلات بأسعار شاملة هامش الربح، مرتّبة من الأرخص. زر <b>«احجز عبر واتساب»</b> يرسل تفاصيل الرحلة والسعر مباشرةً إلى واتساب الوكالة.</p>
+
+    <h3>حجز الفنادق</h3>
+    <p>يختار المدينة، تاريخ الوصول، عدد الليالي والضيوف، فتظهر الفنادق بالسعر الإجمالي، مع نفس زر الحجز عبر واتساب.</p>
+
+    <h3>بقية الخدمات (فيزا، تأمين، إجازة سوق...)</h3>
+    <p>كل خدمة تفتح نموذج طلب بسيط (مع اختيار الدولة في الفيزا/الباقات) وحقل تفاصيل، ثم تُرسل الطلب عبر واتساب.</p>
+
+    <h3>ميزات إضافية <span class="tag">جديد</span></h3>
+    <ul>
+      <li><b>رسالة ترحيب/مناسبة:</b> شاشة ترحيب تظهر عند فتح التطبيق (يتم التحكم بنصّها وتفعيلها من اللوحة).</li>
+      <li><b>قسم العروض:</b> بطاقات عروض مميّزة في الأعلى، تُدار من اللوحة (مثل عروض العمرة أو الصيف).</li>
+      <li><b>آراء العملاء:</b> شريط تقييمات وشهادات يزيد الثقة، يُدار من اللوحة.</li>
+      <li><b>تبديل العملة USD/IQD:</b> عرض الأسعار بالدولار أو الدينار بسعر صرف محدّث.</li>
+      <li><b>مشاركة:</b> زر لمشاركة أي عرض/رحلة عبر واتساب وغيره.</li>
+    </ul>
+  </section>
+
+  <section id="admin">
+    <h2><span class="n">٤</span> لوحة التحكم (الويب) — كيف تُدار</h2>
+    <p>تُفتح من أي متصفح عبر الرابط المذكور في قسم الروابط، وتحتاج تسجيل دخول (بريد + كلمة مرور).</p>
+
+    <h3>تسجيل الدخول</h3>
+    <div class="step"><b>البريد:</b> الحساب الذي أنشأناه لكِ. <b>كلمة المرور:</b> التي اخترتِها. ثم تضغطين «دخول».</div>
+
+    <h3>الأقسام</h3>
+    <ul>
+      <li><b>رحلات محلية:</b> أضيفي/عدّلي أسعار الخطوط المحلية (شركة الطيران، من، إلى، السعر، المدة، التوقفات).</li>
+      <li><b>الفنادق:</b> اسم الفندق، المدينة، النجوم، سعر الليلة، نوع الإقامة.</li>
+      <li><b>الخدمات:</b> فعّلي/أوقفي أي خدمة، وحدّدي سعرًا تقريبيًا اختياريًا («يبدأ من»).</li>
+      <li><b>العروض <span class="tag">جديد</span>:</b> بطاقات العروض التي تظهر في أعلى التطبيق.</li>
+      <li><b>آراء العملاء <span class="tag">جديد</span>:</b> إضافة تقييمات وشهادات.</li>
+      <li><b>الإعدادات:</b> رقم واتساب، العملة، سعر صرف الدينار، نِسَب هامش الربح، ورسالة الترحيب/المناسبة.</li>
+    </ul>
+
+    <div class="box warn">مهم جدًا: بعد أي تعديل اضغطي زر <b>«حفظ ونشر التحديثات»</b> — عندها فقط تصل التغييرات لتطبيق العملاء.</div>
+  </section>
+
+  <section id="pricing">
+    <h2><span class="n">٥</span> الأسعار وهامش الربح</h2>
+    <p>السعر الذي يراه العميل = سعر المورّد + هامش الربح (يُضاف تلقائيًا). تتحكمين بالنِّسَب من قسم الإعدادات:</p>
+    <table>
+      <tr><th>البند</th><th>الحساب</th></tr>
+      <tr><td>سعر الطيران النهائي</td><td>السعر × (١ + نسبة٪) + مبلغ ثابت</td></tr>
+      <tr><td>سعر الفندق النهائي</td><td>(سعر الليلة × الليالي) × (١ + نسبة٪)</td></tr>
+    </table>
+    <p>العميل يرى السعر النهائي فقط؛ هامش ربحكِ غير ظاهر له.</p>
+  </section>
+
+  <section id="accounts">
+    <h2><span class="n">٦</span> الحسابات والروابط المهمة</h2>
+    <table>
+      <tr><th>العنصر</th><th>الرابط / المعلومة</th></tr>
+      <tr><td>لوحة التحكم</td><td><a class="link" href="https://hkhja.github.io/marsa-admin/">hkhja.github.io/marsa-admin</a></td></tr>
+      <tr><td>هذا الدليل</td><td><a class="link" href="https://hkhja.github.io/marsa-admin/guide.html">hkhja.github.io/marsa-admin/guide.html</a></td></tr>
+      <tr><td>قاعدة البيانات</td><td>Supabase — مشروع <code>marsa-baghdad</code></td></tr>
+      <tr><td>مستودع التطبيق</td><td>GitHub — <code>HKHJA/marsa-baghdad-app</code> (خاص)</td></tr>
+      <tr><td>رقم واتساب الحجز</td><td>07733337378</td></tr>
+    </table>
+  </section>
+
+  <section id="roadmap">
+    <h2><span class="n">٧</span> الميزات القادمة (خارطة الطريق)</h2>
+    <ul>
+      <li><b>إشعارات دفع (Push) من اللوحة <span class="tag soon">قريبًا</span>:</b> ترسلين عرضًا فيصل كإشعار لكل هواتف العملاء — أداة تسويق قوية.</li>
+      <li><b>مساعد سفر ذكي (AI) <span class="tag soon">قريبًا</span>:</b> يقترح وجهات ضمن ميزانية العميل ويجيب على أسئلته.</li>
+      <li><b>لوحة إحصائيات <span class="tag soon">قريبًا</span>:</b> عدد عمليات البحث، أكثر الوجهات طلبًا، ونقرات واتساب.</li>
+      <li><b>أسعار طيران مباشرة (Live) <span class="tag soon">قيد البحث</span>:</b> ربط مع مورّد عراقي (مثل Moonline أو IT4T/Babylon أو وكالة الخطوط مباشرة) لعرض أسعار حقيقية قابلة للإصدار.</li>
+      <li><b>وضع العمرة والحج:</b> مواقيت الصلاة، اتجاه القبلة، عدّاد الباقة.</li>
+    </ul>
+    <div class="box">هذا الدليل يُحدَّث تلقائيًا مع كل ميزة جديدة تُضاف للتطبيق أو اللوحة.</div>
+  </section>
+
+  <div class="foot">مرسى بغداد للسفر والسياحة — دليل داخلي — آخر تحديث مع الإصدار 2.0</div>
+</div>
+</body>
+</html>

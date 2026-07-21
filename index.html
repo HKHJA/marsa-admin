@@ -102,6 +102,8 @@
       <div class="tab active" data-p="flights" onclick="tab('flights')">✈️ رحلات محلية</div>
       <div class="tab" data-p="hotels" onclick="tab('hotels')">🏨 الفنادق</div>
       <div class="tab" data-p="services" onclick="tab('services')">🧰 الخدمات</div>
+      <div class="tab" data-p="deals" onclick="tab('deals')">🔥 العروض</div>
+      <div class="tab" data-p="reviews" onclick="tab('reviews')">⭐ الآراء</div>
       <div class="tab" data-p="settings" onclick="tab('settings')">⚙️ الإعدادات</div>
     </div>
 
@@ -140,6 +142,32 @@
       </div>
     </div>
 
+    <!-- DEALS -->
+    <div class="pane" id="p_deals">
+      <div class="card">
+        <h2>العروض المميّزة</h2>
+        <div class="hint">تظهر كبطاقات في أعلى التطبيق. اترك السعر 0 إذا كان العرض "حسب الطلب".</div>
+        <table>
+          <thead><tr><th>عنوان العرض</th><th>الوصف</th><th class="num">السعر ($)</th><th class="act"></th></tr></thead>
+          <tbody id="dealsBody"></tbody>
+        </table>
+        <button class="btn primary sm addrow" onclick="addDeal()">+ إضافة عرض</button>
+      </div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="pane" id="p_reviews">
+      <div class="card">
+        <h2>آراء العملاء</h2>
+        <div class="hint">تظهر كتقييمات في التطبيق لزيادة الثقة.</div>
+        <table>
+          <thead><tr><th>الاسم</th><th class="num">النجوم</th><th>التعليق</th><th class="act"></th></tr></thead>
+          <tbody id="reviewsBody"></tbody>
+        </table>
+        <button class="btn primary sm addrow" onclick="addReview()">+ إضافة رأي</button>
+      </div>
+    </div>
+
     <!-- SETTINGS -->
     <div class="pane" id="p_settings">
       <div class="card">
@@ -151,7 +179,18 @@
           <div class="field"><label>هامش ربح الطيران %</label><input id="s_fpct" type="number"></div>
           <div class="field"><label>هامش ربح ثابت للطيران ($)</label><input id="s_ffix" type="number"></div>
           <div class="field"><label>هامش ربح الفنادق %</label><input id="s_hpct" type="number"></div>
+          <div class="field"><label>سعر صرف الدولار (1$ = كم دينار)</label><input id="s_iqd" type="number" placeholder="1310"></div>
         </div>
+      </div>
+      <div class="card">
+        <h2>🎉 رسالة الترحيب / المناسبة</h2>
+        <div class="hint">تظهر شاشة ترحيب عند فتح التطبيق. فعّلها لمناسبة (عيد ميلاد، عيد...) ثم أوقفها بعدها.</div>
+        <div class="svc" style="border:0;padding:0 0 12px">
+          <div class="l">تفعيل شاشة الترحيب</div>
+          <label class="switch"><input type="checkbox" id="s_bd_on"><span class="slider"></span></label>
+        </div>
+        <div class="field"><label>العنوان</label><input id="s_bd_title" placeholder="🎉 كل عام وأنتِ بخير"></div>
+        <div class="field"><label>الرسالة</label><input id="s_bd_msg" placeholder="هدية خاصة من ..."></div>
       </div>
     </div>
   </div>
@@ -175,7 +214,7 @@ const SUPABASE_ANON_KEY = "sb_publishable_nixngfur47d9UyHqEG7DCw_e99qezPM";
 const DEMO = SUPABASE_URL === "YOUR_SUPABASE_URL";
 
 // ---------- data ----------
-let flights=[], hotels=[], services=[], settings={};
+let flights=[], hotels=[], services=[], settings={}, deals=[], reviews=[];
 const SERVICE_DEFS = [
   {id:'flights',e:'✈️',t:'حجز طيران'},{id:'hotels',e:'🏨',t:'حجز فنادق'},
   {id:'visa',e:'🛂',t:'تأشيرات (فيزا)'},{id:'idp',e:'🪪',t:'إجازة سوق دولية'},
@@ -197,7 +236,16 @@ function seed(){
     {name:'Marina Bay Hotel',city:'DXB',stars:4,price:85,board:'غرفة فقط'},
   ];
   services=SERVICE_DEFS.map(s=>({id:s.id,enabled:true,fromPrice:''}));
-  settings={whatsapp:'9647733337378',currency:'USD',flightPct:8,flightFixed:15,hotelPct:12};
+  deals=[
+    {title:'بغداد ← دبي',subtitle:'ذهاب وإياب — عرض محدود',price:189},
+    {title:'عمرة رمضان',subtitle:'باقة كاملة تشمل الطيران والفندق',price:0},
+  ];
+  reviews=[
+    {name:'أحمد ك.',stars:5,text:'خدمة ممتازة وسريعة، حجزت رحلتي خلال دقائق.'},
+    {name:'زينة م.',stars:5,text:'أفضل أسعار للعمرة، شكراً مرسى بغداد.'},
+  ];
+  settings={whatsapp:'9647733337378',currency:'USD',flightPct:8,flightFixed:15,hotelPct:12,
+    usdToIqd:1310,birthday:{enabled:false,title:'🎉 كل عام وأنتِ بخير',message:''}};
 }
 
 // ---------- render ----------
@@ -243,24 +291,50 @@ function renderServices(){
   }).join('');
 }
 function setSvc(id,k,v){let s=services.find(x=>x.id===id);if(!s){s={id,enabled:true,fromPrice:''};services.push(s);}s[k]=(k==='enabled')?v:v;}
+function renderDeals(){
+  document.getElementById('dealsBody').innerHTML=deals.map((d,i)=>`
+    <tr>
+      <td><input value="${d.title||''}" onchange="deals[${i}].title=this.value"></td>
+      <td><input value="${d.subtitle||''}" onchange="deals[${i}].subtitle=this.value"></td>
+      <td class="num"><input type="number" value="${d.price||0}" onchange="deals[${i}].price=+this.value"></td>
+      <td class="act"><button class="btn del sm" onclick="deals.splice(${i},1);renderDeals()">✕</button></td>
+    </tr>`).join('');
+}
+function addDeal(){deals.push({title:'',subtitle:'',price:0});renderDeals();}
+function renderReviews(){
+  document.getElementById('reviewsBody').innerHTML=reviews.map((r,i)=>`
+    <tr>
+      <td><input value="${r.name||''}" onchange="reviews[${i}].name=this.value"></td>
+      <td class="num"><input type="number" min="1" max="5" value="${r.stars||5}" onchange="reviews[${i}].stars=+this.value"></td>
+      <td><input value="${r.text||''}" onchange="reviews[${i}].text=this.value"></td>
+      <td class="act"><button class="btn del sm" onclick="reviews.splice(${i},1);renderReviews()">✕</button></td>
+    </tr>`).join('');
+}
+function addReview(){reviews.push({name:'',stars:5,text:''});renderReviews();}
 function renderSettings(){
   s_wa.value=settings.whatsapp||''; s_cur.value=settings.currency||'USD';
   s_fpct.value=settings.flightPct??8; s_ffix.value=settings.flightFixed??15; s_hpct.value=settings.hotelPct??12;
+  s_iqd.value=settings.usdToIqd??1310;
+  const bd=settings.birthday||{}; s_bd_on.checked=!!bd.enabled; s_bd_title.value=bd.title||''; s_bd_msg.value=bd.message||'';
 }
 function collectSettings(){
   settings.whatsapp=s_wa.value.trim(); settings.currency=s_cur.value.trim()||'USD';
   settings.flightPct=+s_fpct.value; settings.flightFixed=+s_ffix.value; settings.hotelPct=+s_hpct.value;
+  settings.usdToIqd=+s_iqd.value||1310;
+  settings.birthday={enabled:s_bd_on.checked,title:s_bd_title.value.trim(),message:s_bd_msg.value.trim()};
 }
-function renderAll(){renderFlights();renderHotels();renderServices();renderSettings();}
+function renderAll(){renderFlights();renderHotels();renderServices();renderDeals();renderReviews();renderSettings();}
 
 // ---------- persistence (Supabase) ----------
 const sb = DEMO ? null : supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 async function loadData(){
   if(DEMO){ seed(); renderAll(); return; }
   const {data,error}=await sb.from('catalog').select('data').eq('id','data').maybeSingle();
-  if(!error && data && data.data){ const d=data.data; flights=d.flights||[]; hotels=d.hotels||[]; services=d.services||[]; settings=d.settings||{}; }
+  if(!error && data && data.data){ const d=data.data; flights=d.flights||[]; hotels=d.hotels||[]; services=d.services||[]; settings=d.settings||{}; deals=d.deals||[]; reviews=d.reviews||[]; }
   else { seed(); }
   if(!services.length) services=SERVICE_DEFS.map(s=>({id:s.id,enabled:true,fromPrice:''}));
+  if(!settings.birthday) settings.birthday={enabled:false,title:'🎉 كل عام وأنتِ بخير',message:''};
+  if(settings.usdToIqd==null) settings.usdToIqd=1310;
   renderAll();
 }
 async function saveAll(){
@@ -268,7 +342,7 @@ async function saveAll(){
   const st=document.getElementById('status');
   if(DEMO){ st.textContent='وضع تجريبي — لم يتم الحفظ (اربط Supabase)'; st.className='status'; return; }
   st.textContent='جاري الحفظ...'; st.className='status';
-  const {error}=await sb.from('catalog').upsert({id:'data', data:{flights,hotels,services,settings}});
+  const {error}=await sb.from('catalog').upsert({id:'data', data:{flights,hotels,services,settings,deals,reviews}});
   if(error){ st.textContent='خطأ في الحفظ: '+error.message; st.className='status'; }
   else { st.textContent='✓ تم الحفظ ونشر التحديثات للجميع'; st.className='status ok'; }
 }
