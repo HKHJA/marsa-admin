@@ -365,7 +365,7 @@ async function saveAll(){
   const st=document.getElementById('status');
   if(DEMO){ st.textContent='وضع تجريبي — لم يتم الحفظ (اربط Supabase)'; st.className='status'; return; }
   st.textContent='جاري الحفظ...'; st.className='status';
-  const {error}=await sb.from('catalog').upsert({id:'data', data:{flights,hotels,services,settings,deals,reviews}});
+  const {error}=await sb.from('catalog').upsert({id:'data', data:{flights,hotels,services,settings,deals,reviews,birthday:settings.birthday||{}}});
   if(error){ st.textContent='خطأ في الحفظ: '+error.message; st.className='status'; }
   else { st.textContent='✓ تم الحفظ ونشر التحديثات للجميع'; st.className='status ok'; }
 }
