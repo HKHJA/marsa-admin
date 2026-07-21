@@ -104,6 +104,7 @@
       <div class="tab" data-p="services" onclick="tab('services')">🧰 الخدمات</div>
       <div class="tab" data-p="deals" onclick="tab('deals')">🔥 العروض</div>
       <div class="tab" data-p="reviews" onclick="tab('reviews')">⭐ الآراء</div>
+      <div class="tab" data-p="notify" onclick="tab('notify')">📣 إشعارات</div>
       <div class="tab" data-p="settings" onclick="tab('settings')">⚙️ الإعدادات</div>
     </div>
 
@@ -165,6 +166,24 @@
           <tbody id="reviewsBody"></tbody>
         </table>
         <button class="btn primary sm addrow" onclick="addReview()">+ إضافة رأي</button>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS (push blast) -->
+    <div class="pane" id="p_notify">
+      <div class="card">
+        <h2>📣 إرسال إشعار لكل العملاء</h2>
+        <div class="hint">يصل الإشعار فوراً إلى هاتف كل من ثبّت التطبيق (حتى لو كان مغلقاً). مثالي لعرض جديد أو تذكير. اكتب رسالة قصيرة وواضحة.</div>
+        <div class="field"><label>العنوان (اختياري)</label><input id="nf_title" maxlength="60" placeholder="مثال: مرسى بغداد"></div>
+        <div class="field"><label>الرسالة</label><input id="nf_msg" maxlength="180" placeholder="مثال: خصم خاص على رحلات دبي هذا الأسبوع! احجز الآن عبر التطبيق."></div>
+        <div class="field"><label>رابط عند الضغط (اختياري)</label><input id="nf_url" placeholder="https://wa.me/9647733337378"></div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:6px">
+          <button id="nfSendBtn" class="btn primary" onclick="armSend()">📣 إرسال للجميع</button>
+          <button id="nfConfirmBtn" class="btn save hidden" onclick="sendNotification()">تأكيد الإرسال ✓</button>
+          <button id="nfCancelBtn" class="btn ghost sm hidden" onclick="disarmSend()">إلغاء</button>
+          <span class="status" id="nfStatus"></span>
+        </div>
+        <div class="hint" style="margin-top:12px">ملاحظة: لن يصل الإشعار إلا للأجهزة التي ثبّتت التطبيق ووافقت على الإشعارات. قبل توزيع التطبيق لن يكون هناك مشتركون بعد.</div>
       </div>
     </div>
 
@@ -261,6 +280,7 @@ function seed(){
 function tab(p){
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.dataset.p===p));
   document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('active',x.id==='p_'+p));
+  const bar=document.querySelector('.savebar'); if(bar) bar.style.display=(p==='notify')?'none':'';
 }
 function renderFlights(){
   document.getElementById('flightsBody').innerHTML=flights.map((f,i)=>`
@@ -356,6 +376,49 @@ async function saveAll(){
   const {error}=await sb.from('catalog').upsert({id:'data', data:{flights,hotels,services,settings,deals,reviews}});
   if(error){ st.textContent='خطأ في الحفظ: '+error.message; st.className='status'; }
   else { st.textContent='✓ تم الحفظ ونشر التحديثات للجميع'; st.className='status ok'; }
+}
+
+// ---------- push notifications (blast to all app users) ----------
+const FUNCTIONS_URL = SUPABASE_URL + "/functions/v1";
+function armSend(){
+  document.getElementById('nfSendBtn').classList.add('hidden');
+  document.getElementById('nfConfirmBtn').classList.remove('hidden');
+  document.getElementById('nfCancelBtn').classList.remove('hidden');
+}
+function disarmSend(){
+  document.getElementById('nfSendBtn').classList.remove('hidden');
+  document.getElementById('nfConfirmBtn').classList.add('hidden');
+  document.getElementById('nfCancelBtn').classList.add('hidden');
+}
+async function sendNotification(){
+  disarmSend();
+  const st=document.getElementById('nfStatus');
+  const title=document.getElementById('nf_title').value.trim();
+  const message=document.getElementById('nf_msg').value.trim();
+  const url=document.getElementById('nf_url').value.trim();
+  if(!message){ st.textContent='اكتب نص الرسالة أولاً'; st.className='status'; return; }
+  if(DEMO){ st.textContent='وضع تجريبي — لا يمكن الإرسال'; st.className='status'; return; }
+  st.textContent='جاري الإرسال...'; st.className='status';
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    if(!session){ st.textContent='انتهت الجلسة — سجّل الدخول من جديد'; st.className='status'; return; }
+    const res=await fetch(FUNCTIONS_URL+'/send-notification',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
+      body:JSON.stringify({title,message,url})
+    });
+    const out=await res.json().catch(()=>({}));
+    if(res.ok && out.id){
+      const n=(out.recipients!=null)?(' — وصل إلى '+out.recipients+' جهاز'):'';
+      st.textContent='✓ تم الإرسال'+n; st.className='status ok';
+      document.getElementById('nf_title').value=''; document.getElementById('nf_msg').value=''; document.getElementById('nf_url').value='';
+    } else {
+      const e=out.errors?JSON.stringify(out.errors):(out.error||('HTTP '+res.status));
+      if(/subscrib|player|recipient|include/i.test(e)) st.textContent='لا يوجد مشتركون بعد — بعد تثبيت التطبيق على الهواتف ستصل الإشعارات.';
+      else st.textContent='تعذّر الإرسال: '+e;
+      st.className='status';
+    }
+  }catch(err){ st.textContent='خطأ في الاتصال: '+err.message; st.className='status'; }
 }
 
 // ---------- auth ----------
